@@ -10,7 +10,7 @@ writing C code.
 
 #### setcred
 
-The [setcred(2)](https://man.freebsd.org/cgi/man.cgi?setcred) is a
+[setcred(2)](https://man.freebsd.org/cgi/man.cgi?setcred) is a
 FreeBSD system call that can change the credentials of the current
 process by altering the effective and/or real user and group IDs.
 The system call either requires superuser privileges, or a mac policy
