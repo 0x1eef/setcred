@@ -61,3 +61,11 @@ func SetSvGid(svgid uint32) Option {
 		creds.sc_svgid = svgid
 	}
 }
+
+func SetSuppGroups(groups ...uint32) Option {
+	return func(creds *setcred, flags *uint) {
+		*flags |= SETSUPPGROUPS
+		creds.sc_supp_groups = uintptr(unsafe.Pointer(unsafe.SliceData(groups)))
+		creds.sc_supp_groups_nb = uint32(len(groups))
+	}
+}

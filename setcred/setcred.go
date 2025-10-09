@@ -1,9 +1,5 @@
 package setcred
 
-import (
-	"unsafe"
-)
-
 type setcred struct {
 	sc_uid            uint32
 	sc_ruid           uint32
@@ -18,7 +14,6 @@ type setcred struct {
 }
 
 func New(opts ...Option) (*setcred, uint) {
-	groups := []uint{}
 	creds := &setcred{
 		sc_uid:            0,
 		sc_ruid:           0,
@@ -28,8 +23,8 @@ func New(opts ...Option) (*setcred, uint) {
 		sc_svgid:          0,
 		sc_label:          0,
 		sc_pad:            uint32(0),
-		sc_supp_groups_nb: uint32(len(groups)),
-		sc_supp_groups:    uintptr(unsafe.Pointer(unsafe.SliceData(groups))),
+		sc_supp_groups_nb: 0,
+		sc_supp_groups:    0,
 	}
 	flags := uint(0)
 	for _, set := range opts {
