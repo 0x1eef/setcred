@@ -22,7 +22,7 @@ func New(opts ...Option) (*setcred, uint) {
 		sc_rgid:           0,
 		sc_svgid:          0,
 		sc_label:          0,
-		sc_pad:            uint32(0),
+		sc_pad:            0,
 		sc_supp_groups_nb: 0,
 		sc_supp_groups:    0,
 	}
