@@ -84,3 +84,11 @@ func SetSuppGroups(groups ...uint32) Option {
 		creds.sc_supp_groups_nb = uint32(len(groups))
 	}
 }
+
+func SetMacLabel(label string) Option {
+	return func(creds *setcred, flags *uint) {
+		*flags |= setmaclabel
+		bytes := []byte(label)
+		creds.sc_label = uintptr(unsafe.Pointer(unsafe.SliceData(bytes)))
+	}
+}
