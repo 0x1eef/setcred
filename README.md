@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	err := setcred.SetCreds(
+	err := setcred.SetCred(
 		setcred.SetUid(uint32(1001)),
 		setcred.SetGid(uint32(1001)),
 	)
