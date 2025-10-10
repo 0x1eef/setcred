@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"syscall"
 	"unsafe"
+	"runtime"
 )
 
 type Option func(*setcred, *uint)
@@ -19,13 +20,18 @@ const setsvgid = uint(1) << 5
 const setsuppgroups = uint(1) << 6
 const setmaclabel = uint(1) << 7
 
-func SetCred(creds *setcred, flags uint) error {
+func SetCred(opts ...Option) error {
+	creds, flags := new(opts...)
 	fptr := uintptr(flags)
 	cptr := uintptr(unsafe.Pointer(creds))
 	sptr := uintptr(unsafe.Sizeof(*creds))
 	_, _, err := syscall.Syscall6(uintptr(sysnum), fptr, cptr, sptr, 0, 0, 0)
 	if err != 0 {
 		return errors.New(fmt.Sprintf("errno: %d", err))
+	}
+	runtime.KeepAlive(creds)
+	for _, set := range opts {
+		runtime.KeepAlive(set)
 	}
 	return nil
 }

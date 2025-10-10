@@ -13,7 +13,7 @@ type setcred struct {
 	sc_label          uintptr
 }
 
-func New(opts ...Option) (*setcred, uint) {
+func new(opts ...Option) (*setcred, uint) {
 	creds := &setcred{
 		sc_uid:            0,
 		sc_ruid:           0,
