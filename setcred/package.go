@@ -1,8 +1,6 @@
 package setcred
 
 import (
-	"errors"
-	"fmt"
 	"syscall"
 	"unsafe"
 	"runtime"
@@ -10,7 +8,7 @@ import (
 
 type Option func(*setcred, *uint)
 
-const sysnum = int(591)
+const sysid = int(591)
 const setuid = uint(1) << 0
 const setruid = uint(1) << 1
 const setsvuid = uint(1) << 2
@@ -22,12 +20,13 @@ const setmaclabel = uint(1) << 7
 
 func SetCred(opts ...Option) error {
 	creds, flags := new(opts...)
+	iptr := uintptr(sysid)
 	fptr := uintptr(flags)
 	cptr := uintptr(unsafe.Pointer(creds))
 	sptr := uintptr(unsafe.Sizeof(*creds))
-	_, _, err := syscall.Syscall6(uintptr(sysnum), fptr, cptr, sptr, 0, 0, 0)
+	_, _, err := syscall.Syscall6(iptr, fptr, cptr, sptr, 0, 0, 0)
 	if err != 0 {
-		return errors.New(fmt.Sprintf("errno: %d", err))
+		return err
 	}
 	runtime.KeepAlive(creds)
 	for _, set := range opts {
