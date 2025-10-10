@@ -50,6 +50,12 @@ The install process is more or less straight forward
 
     go get github.com/0x1eef/bsd
 
+## Sources
+
+* [github.com/@0x1eef](https://github.com/0x1eef/bsd#readme)
+* [gitlab.com/@0x1eef](https://gitlab.com/0x1eef/bsd#about)
+* [hardenedbsd.org/@0x1eef](https://git.HardenedBSD.org/0x1eef#about)
+
 ## License
 
 [BSD Zero Clause](https://choosealicense.com/licenses/0bsd/)
