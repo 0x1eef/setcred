@@ -48,14 +48,21 @@ func main() {
 
 The control package can enable or disable security features
 that are managed by the [HardenedBSD](https://hardenedbsd.org)
-kernel. Unlike other packages this one happens to not be pure
-Go and requires C code to be compiled as well. That's largely
-because HardenedBSD does not implement its own system calls
-because they could conflict with FreeBSD's own system calls.
+kernel on a per-file basis. Unlike other packages this one
+happens to not be pure Go and requires C code to be compiled.
+That's largely because HardenedBSD does not implement its
+own system calls because they could conflict with FreeBSD,
+and HardenedBSD regularly synchronizes updates from FreeBSD.
+
+Given that context, HardenedBSD does not provide system calls
+that can enable or disable feature state, and that leaves the
+primary interface as the C libraries that HardenedBSD does
+provide. In this case, that interface is
+[libhbsdcontrol](https://git.hardenedbsd.org/hardenedbsd/hardenebsd).
 
 The following example queries a list of feature names, and then proceeds
 to enable, disable and restore the system default for the "mprotect"
-feature:
+feature. These changes are scoped to the `/usr/bin/mdo` binary:
 
 ```go
 package main
