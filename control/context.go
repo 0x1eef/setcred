@@ -1,0 +1,64 @@
+package control
+
+/*
+	#cgo LDFLAGS: -lhbsdcontrol
+	#include "control.h"
+*/
+import "C"
+
+import (
+	"errors"
+	"syscall"
+)
+
+type Context struct {
+	namespace string
+	flags     uint64
+	ptr       *C.struct__hbsdctrl_ctx
+}
+
+func New(opts ...Option) Context {
+	ctx := Context{namespace: "system", flags: 0}
+	for _, set := range opts {
+		set(&ctx)
+	}
+	flags, ns := C.hbsdctrl_flag_t(ctx.flags), C.CString(ctx.namespace)
+	ctx.ptr = C.hbsdctrl_ctx_new(flags, ns)
+	return ctx
+}
+
+func (ctx *Context) FeatureNames() ([]string, error) {
+	names := []string{}
+	cary := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
+	if cary == nil {
+		return names, errors.New("null pointer")
+	}
+	defer C.hbsdctrl_ctx_free_feature_names(cary)
+	names = gostrings(cary)
+	return names, nil
+}
+
+func (ctx *Context) Enable(feature, path string) error {
+	result := C.enable_feature(ctx.ptr, C.CString(feature), C.CString(path))
+	return handle(result)
+}
+
+func (ctx *Context) Disable(feature, path string) error {
+	result := C.disable_feature(ctx.ptr, C.CString(feature), C.CString(path))
+	return handle(result)
+}
+
+func (ctx *Context) Sysdef(feature, path string) error {
+	result := C.sysdef_feature(ctx.ptr, C.CString(feature), C.CString(path))
+	return handle(result)
+}
+
+func handle(result C.int) error {
+	if result == 0 {
+		return nil
+	} else if result == -1 {
+		return errors.New("an unknown error happened")
+	} else {
+		return syscall.Errno(result)
+	}
+}

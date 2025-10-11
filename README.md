@@ -44,6 +44,47 @@ func main() {
 }
 ```
 
+### control
+
+The control package can enable or disable security features
+that are managed by the [HardenedBSD](https://hardenedbsd.org)
+kernel. Unlike other packages this one happens to not be pure
+Go and requires C code to be compiled as well. That's largely
+because HardenedBSD does not implement its own system calls
+because they could conflict with FreeBSD's own system calls.
+
+The following example queries a list of feature names, and then proceeds
+to enable, disable and restore the system default for the "mprotect"
+feature:
+
+```go
+package main
+
+import (
+	"github.com/0x1eef/bsd/control"
+)
+
+func main() {
+	ctx := control.New(control.System())
+	if features, err := ctx.FeatureNames(); err != nil {
+		panic(err)
+	} else {
+		for _, name := range features {
+			fmt.Printf("feature: %s\n", name)
+		}
+		if err := ctx.Enable("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		}
+		if err := ctx.Disable("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		}
+		if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
+			panic(err)
+		}
+	}
+}
+```
+
 ## Install
 
 The install process is more or less straight forward
