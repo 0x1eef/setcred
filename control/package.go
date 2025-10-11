@@ -2,15 +2,9 @@ package control
 
 type Option func(c *Context)
 
-func System() Option {
+func Namespace(ns string) Option {
 	return func(c *Context) {
-		c.namespace = "system"
-	}
-}
-
-func User() Option {
-	return func(c *Context) {
-		c.namespace = "user"
+		c.namespace = ns
 	}
 }
 

@@ -3,6 +3,8 @@ package control
 import (
 	"C"
 	"unsafe"
+	"syscall"
+	"errors"
 )
 
 func gostrings(cary **C.char) []string {

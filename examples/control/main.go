@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	ctx := control.New(control.System())
+	ctx := control.New(control.Namespace("system"))
 	if features, err := ctx.FeatureNames(); err != nil {
 		panic(err)
 	} else {
