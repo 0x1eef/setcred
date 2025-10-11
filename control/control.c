@@ -22,7 +22,7 @@ disable_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path)
 int
 sysdef_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path)
 {
-  return set_feature(ctx, name, path, 3);
+  return set_feature(ctx, name, path, -1);
 }
 
 static int
@@ -44,9 +44,16 @@ set_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path, int state)
     res = -1;
     goto done;
   }
-  if (feature->hf_apply(ctx, feature, &fd, &state) == RES_FAIL) {
-    res = -1;
-    goto done;
+  if (state == -1) {
+    if (feature->hf_unapply(ctx, feature, &fd, NULL) == RES_FAIL) {
+      res = -1;
+      goto done;
+    }
+  } else {
+    if (feature->hf_apply(ctx, feature, &fd, &state) == RES_FAIL) {
+      res = -1;
+      goto done;
+    }
   }
   goto done;
 done:
@@ -83,6 +90,8 @@ feature_status(hbsdctrl_ctx_t* ctx,
   if (feature->hf_get(ctx, feature, &fd, &state) == RES_FAIL) {
     res = -1;
     goto done;
+  } else {
+    errno = 0;
   }
   *status = (char*)hbsdctrl_feature_state_to_string(&state);
   goto done;
