@@ -81,6 +81,9 @@ func main() {
 		if err := ctx.Sysdef("mprotect", "/usr/bin/mdo"); err != nil {
 			panic(err)
 		}
+		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
+			fmt.Printf("The mproect has the status: %s\n", status)
+		}
 	}
 }
 ```

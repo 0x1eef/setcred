@@ -9,6 +9,7 @@ import "C"
 import (
 	"errors"
 	"syscall"
+	"unsafe"
 )
 
 type Context struct {
@@ -51,6 +52,17 @@ func (ctx *Context) Disable(feature, path string) error {
 func (ctx *Context) Sysdef(feature, path string) error {
 	result := C.sysdef_feature(ctx.ptr, C.CString(feature), C.CString(path))
 	return handle(result)
+}
+
+func (ctx *Context) Status(feature, path string) (string, error) {
+	cStatus, cFeature, cPath := C.CString(""), C.CString(feature), C.CString(path)
+	cPtr := (**C.char)(unsafe.Pointer(&cStatus))
+	result := C.feature_status(ctx.ptr, cFeature, cPath, cPtr)
+	if result == 0 {
+		return C.GoString(cStatus), nil
+	} else {
+		return "", handle(result)
+	}
 }
 
 func handle(result C.int) error {
