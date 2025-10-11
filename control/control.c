@@ -28,24 +28,26 @@ sysdef_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path)
 static int
 set_feature(hbsdctrl_ctx_t* ctx, const char* name, const char* path, int state)
 {
-  hbsdctrl_feature_t* feature = NULL;
-  int fd, res;
+  hbsdctrl_feature_t* feature;
+  int res = 0, fd = -1;
 
-  res = -1;
   errno = 0;
-  feature = NULL;
-  fd = -1;
-  if (ctx == NULL)
+  if (ctx == NULL) {
+    res = -1;
     goto done;
-  feature = hbsdctrl_ctx_find_feature_by_name(ctx, name);
-  if (feature == NULL)
+  }
+  if ((feature = hbsdctrl_ctx_find_feature_by_name(ctx, name)) == NULL) {
+    res = -1;
     goto done;
-  fd = open(path, O_PATH);
-  if (fd == -1)
+  }
+  if ((fd = open(path, O_PATH)) == -1) {
+    res = -1;
     goto done;
-  if (feature->hf_apply(ctx, feature, &fd, &state) == RES_FAIL)
+  }
+  if (feature->hf_apply(ctx, feature, &fd, &state) == RES_FAIL) {
+    res = -1;
     goto done;
-  res = 0;
+  }
   goto done;
 done:
   if (fd != -1)
