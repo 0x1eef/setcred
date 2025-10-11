@@ -28,17 +28,6 @@ func New(opts ...Option) Context {
 	return ctx
 }
 
-func (ctx *Context) FeatureNames() ([]string, error) {
-	names := []string{}
-	cary := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
-	if cary == nil {
-		return names, errors.New("null pointer")
-	}
-	defer C.hbsdctrl_ctx_free_feature_names(cary)
-	names = gostrings(cary)
-	return names, nil
-}
-
 func (ctx *Context) Enable(feature, path string) error {
 	result := C.enable_feature(ctx.ptr, C.CString(feature), C.CString(path))
 	return handle(result)
@@ -54,6 +43,17 @@ func (ctx *Context) Sysdef(feature, path string) error {
 	return handle(result)
 }
 
+func (ctx *Context) FeatureNames() ([]string, error) {
+	names := []string{}
+	cary := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
+	if cary == nil {
+		return names, errors.New("null pointer")
+	}
+	defer C.hbsdctrl_ctx_free_feature_names(cary)
+	names = gostrings(cary)
+	return names, nil
+}
+
 func (ctx *Context) Status(feature, path string) (string, error) {
 	cStatus, cFeature, cPath := C.CString(""), C.CString(feature), C.CString(path)
 	cPtr := (**C.char)(unsafe.Pointer(&cStatus))
@@ -65,12 +65,3 @@ func (ctx *Context) Status(feature, path string) (string, error) {
 	}
 }
 
-func handle(result C.int) error {
-	if result == 0 {
-		return nil
-	} else if result == -1 {
-		return errors.New("an unknown error happened")
-	} else {
-		return syscall.Errno(result)
-	}
-}

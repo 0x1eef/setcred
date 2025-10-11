@@ -19,3 +19,14 @@ func gostrings(cary **C.char) []string {
 	}
 	return strings
 }
+
+
+func handle(result C.int) error {
+	if result == 0 {
+		return nil
+	} else if result == -1 {
+		return errors.New("an unknown error happened")
+	} else {
+		return syscall.Errno(result)
+	}
+}
