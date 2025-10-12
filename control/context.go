@@ -27,21 +27,6 @@ func New(opts ...Option) Context {
 	return ctx
 }
 
-func (ctx *Context) Enable(feature, path string) error {
-	result := C.enable_feature(ctx.ptr, C.CString(feature), C.CString(path))
-	return handle(result)
-}
-
-func (ctx *Context) Disable(feature, path string) error {
-	result := C.disable_feature(ctx.ptr, C.CString(feature), C.CString(path))
-	return handle(result)
-}
-
-func (ctx *Context) Sysdef(feature, path string) error {
-	result := C.sysdef_feature(ctx.ptr, C.CString(feature), C.CString(path))
-	return handle(result)
-}
-
 func (ctx *Context) FeatureNames() ([]string, error) {
 	names := []string{}
 	cary := C.hbsdctrl_ctx_all_feature_names(ctx.ptr)
@@ -86,4 +71,19 @@ func (ctx *Context) IsSysdef(feature, path string) (bool, error) {
 	} else {
 		return status == "sysdef", err
 	}
+}
+
+func (ctx *Context) Enable(feature, path string) error {
+	result := C.enable_feature(ctx.ptr, C.CString(feature), C.CString(path))
+	return handle(result)
+}
+
+func (ctx *Context) Disable(feature, path string) error {
+	result := C.disable_feature(ctx.ptr, C.CString(feature), C.CString(path))
+	return handle(result)
+}
+
+func (ctx *Context) Sysdef(feature, path string) error {
+	result := C.sysdef_feature(ctx.ptr, C.CString(feature), C.CString(path))
+	return handle(result)
 }
