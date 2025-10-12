@@ -63,3 +63,27 @@ func (ctx *Context) Status(feature, path string) (string, error) {
 		return "", handle(result)
 	}
 }
+
+func (ctx *Context) IsEnabled(feature, path string) (bool, error) {
+	if status, err := ctx.Status(feature, path); err != nil {
+		return false, err
+	} else {
+		return status == "enabled", err
+	}
+}
+
+func (ctx *Context) IsDisabled(feature, path string) (bool, error) {
+	if status, err := ctx.Status(feature, path); err != nil {
+		return false, err
+	} else {
+		return status == "disabled", err
+	}
+}
+
+func (ctx *Context) IsSysdef(feature, path string) (bool, error) {
+	if status, err := ctx.Status(feature, path); err != nil {
+		return false, err
+	} else {
+		return status == "sysdef", nil
+	}
+}
