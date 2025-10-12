@@ -25,7 +25,7 @@ func main() {
 		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
 			panic(err)
 		} else {
-			fmt.Printf("The mproect has the status: %s\n", status)
+			fmt.Printf("The mprotect feature has the status: %s\n", status)
 		}
 	}
 }

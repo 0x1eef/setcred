@@ -33,13 +33,13 @@ import (
 
 func main() {
 	err := setcred.SetCred(
-		setcred.SetUid(uint32(1001)),
-		setcred.SetGid(uint32(1001)),
+		setcred.SetUid(1001),
+		setcred.SetGid(1001),
 	)
 	if err != nil {
 		panic(err)
 	} else {
-		fmt.Printf("euid: %d, egid: %d", os.Geteuid(), os.Getegid())
+		fmt.Printf("euid: %d, egid: %d\n", os.Geteuid(), os.Getegid())
 	}
 }
 ```
@@ -50,9 +50,9 @@ The control package can enable or disable security features
 that are managed by the [HardenedBSD](https://hardenedbsd.org)
 kernel on a per-file basis. Unlike other packages this one
 happens to not be pure Go and requires C code to be compiled.
-That's largely because HardenedBSD does not implement its
-own system calls because they could conflict with FreeBSD,
-and HardenedBSD regularly synchronizes updates from FreeBSD.
+That's because HardenedBSD does not implement its own system calls
+because they could conflict with FreeBSD, and HardenedBSD regularly
+synchronizes updates from FreeBSD.
 
 Given that context, HardenedBSD does not provide system calls
 that can enable or disable feature state, and that leaves the
@@ -62,7 +62,8 @@ provide. In this case, that interface is
 
 The following example queries a list of feature names, and then proceeds
 to enable, disable and restore the system default for the "mprotect"
-feature. These changes are scoped to the `/usr/bin/mdo` binary:
+feature. As a final step, we query the status of the "mprotect" feature.
+Each method in the example is scoped to the `/usr/bin/mdo` binary:
 
 ```go
 package main
@@ -89,7 +90,7 @@ func main() {
 			panic(err)
 		}
 		if status, err := ctx.Status("mprotect", "/usr/bin/mdo"); err != nil {
-			fmt.Printf("The mproect has the status: %s\n", status)
+			fmt.Printf("The mprotect feature has the status: %s\n", status)
 		}
 	}
 }
