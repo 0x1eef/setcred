@@ -63,4 +63,3 @@ func (ctx *Context) Status(feature, path string) (string, error) {
 		return "", handle(result)
 	}
 }
-

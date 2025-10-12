@@ -1,9 +1,9 @@
 package setcred
 
 import (
+	"runtime"
 	"syscall"
 	"unsafe"
-	"runtime"
 )
 
 type Option func(*setcred, *uint)

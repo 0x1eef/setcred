@@ -2,9 +2,9 @@ package control
 
 import (
 	"C"
-	"unsafe"
-	"syscall"
 	"errors"
+	"syscall"
+	"unsafe"
 )
 
 func gostrings(cary **C.char) []string {
@@ -21,7 +21,6 @@ func gostrings(cary **C.char) []string {
 	}
 	return strings
 }
-
 
 func handle(result C.int) error {
 	if result == 0 {
