@@ -84,6 +84,6 @@ func (ctx *Context) IsSysdef(feature, path string) (bool, error) {
 	if status, err := ctx.Status(feature, path); err != nil {
 		return false, err
 	} else {
-		return status == "sysdef", nil
+		return status == "sysdef", err
 	}
 }
