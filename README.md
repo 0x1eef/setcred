@@ -9,17 +9,19 @@ call on FreeBSD.
 
 #### setcred
 
-[setcred(2)](https://man.freebsd.org/cgi/man.cgi?setcred) is a
-FreeBSD system call that can change the credentials of the current
-process by altering the effective and/or real user and group IDs.
+The [setcred(2)](https://man.freebsd.org/cgi/man.cgi?setcred)
+documentation provides a good introduction.
+
 The system call either requires superuser privileges, or a mac policy
 similar to [mac_do(4)](https://man.freebsd.org/cgi/man.cgi?mac_do)
 that enables unprivileged users to execute the [setcred(2)](https://man.freebsd.org/cgi/man.cgi?setcred)
 system call successfully.
 
 The following example assumes it is being run with superuser privileges,
-and when successful it changes the effective user and group IDs from 0
-(root/wheel) to 1001 (an unprivileged user and group):
+and when successful it changes the effective user ID and effective group
+ID from 0 (root/wheel) to 1001 (an unprivileged user and group) and keep
+in mind that [setcred(2)](https://man.freebsd.org/cgi/man.cgi?setcred) is
+capable of changing other credentials as well:
 
 ```go
 package main
@@ -27,6 +29,7 @@ package main
 import (
 	"fmt"
 	"os"
+
 	"github.com/0x1eef/setcred"
 )
 
