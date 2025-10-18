@@ -50,7 +50,7 @@ func main() {
 
 The install process is more or less straight forward
 
-    go get github.com/0x1eef/setcred
+    go get github.com/0x1eef/setcred@v0.1.0
 
 ## Sources
 

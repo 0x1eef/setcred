@@ -8,6 +8,10 @@ import (
 
 type Option func(*setcred, *uint)
 
+const (
+	Version = "0.1.0"
+)
+
 const sysid = int(591)
 const setuid = uint(1) << 0
 const setruid = uint(1) << 1
