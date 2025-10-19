@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/0x1eef/bsd/setcred"
 	"os"
+	"github.com/0x1eef/bsd/setcred"
 )
 
 func main() {
