@@ -6,11 +6,16 @@ a FreeBSD-specific mechanism for managing process credentials. The system call
 allows programs to dynamically change their effective user ID (EUID),
 effective group ID (EGID), and other credentials at runtime.
 
+## Context
+
 A unique and innovative aspect to setcred(2) is its ability to be extended by
 MAC policies such as [mac_do(4)](https://man.freebsd.org/cgi/man.cgi?mac_do),
 and in turn this can allow unprivileged users change their credentials in a way
 similar to root although any credential transitions must first be added to an
-allowlist.
+allowlist. The net effect is that tools similar to doas(1) and sudo(8) can be
+implemented without a setuid binary, and an example of one such a tool is
+[mdo(1)](https://man.freebsd.org/cgi/man.cgi?mdo).
+
 
 ## Examples
 
